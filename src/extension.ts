@@ -21,6 +21,31 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	vscode.window.registerTerminalLinkProvider({
+		provideTerminalLinks: (context, token) => {
+			// Detect the first instance of the word "test" if it exists and linkify it
+			const startIndex = (context.line as string).indexOf("test");
+			if (startIndex === -1) {
+				return [];
+			}
+			// Return an array of link results, this example only returns a single link
+			return [
+				{
+					startIndex,
+					length: "test".length,
+					tooltip: "Show a notification",
+					// You can return data in this object to access inside handleTerminalLink
+					data: "Example data",
+				},
+			];
+		},
+		handleTerminalLink: (link: any) => {
+			vscode.window.showInformationMessage(
+				`Link activated (data = ${link.data})`
+			);
+		},
+	});
 }
 
 // this method is called when your extension is deactivated
