@@ -1,35 +1,34 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+import * as os from "os";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-  // Use the console to output diagnostic information (console.log) and errors (console.error)
-  // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "xtext-links" is now active!');
+// match "ERROR:Something has gone wrong. (file:/C:/SomeDir/src/main.mydsl line : 30 column : 4)"
+const pattern = /\(((?<path>.*) line : (?<line>\d+)( column : (?<column>\d+))?)\)/;
 
+export function activate(_context: vscode.ExtensionContext) {
   vscode.window.registerTerminalLinkProvider({
-    provideTerminalLinks: (context, token) => {
-      // Detect the first instance of the word "test" if it exists and linkify it
-      const startIndex = (context.line as string).indexOf("test");
-      if (startIndex === -1) {
-        return [];
+    provideTerminalLinks: (context, _token) => {
+      let links = [];
+
+      const regex = new RegExp(pattern, "g");
+      let match;
+      while ((match = regex.exec(context.line)) !== null) {
+        links.push({
+          startIndex: match.index + 1,
+          length: match[1].length,
+          tooltip: "Open Xtext message source",
+          data: {
+            path: match.groups?.path,
+            line: match.groups?.line,
+            column: match.groups?.column,
+          },
+        });
       }
-      // Return an array of link results, this example only returns a single link
-      return [
-        {
-          startIndex,
-          length: "test".length,
-          tooltip: "Show a notification",
-          // You can return data in this object to access inside handleTerminalLink
-          data: "Example data",
-        },
-      ];
+      return links;
     },
+
     handleTerminalLink: (link: any) => {
       vscode.window.showInformationMessage(
-        `Link activated (data = ${link.data})`
+        `Link activated (data = ${link.data.path})`
       );
     },
   });
