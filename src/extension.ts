@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import * as os from "os";
 
 // match "ERROR:Something has gone wrong. (file:/C:/SomeDir/src/main.mydsl line : 30 column : 4)"
-const pattern = /\(((?<path>.*) line : (?<line>\d+)( column : (?<column>\d+))?)\)/;
+const pattern = /\(((?<path>[^\)]+) line : (?<line>\d+)( column : (?<column>\d+))?)\)/;
 
 export function activate(_context: vscode.ExtensionContext) {
   vscode.window.registerTerminalLinkProvider({
@@ -27,9 +27,18 @@ export function activate(_context: vscode.ExtensionContext) {
     },
 
     handleTerminalLink: (link: any) => {
-      vscode.window.showInformationMessage(
-        `Link activated (data = ${link.data.path})`
-      );
+      let path = (link.data.path as string).startsWith("file:")
+        ? vscode.Uri.parse(link.data.path)
+        : vscode.Uri.file(link.data.path);
+
+      vscode.workspace.openTextDocument(path).then((document) => {
+        vscode.window.showTextDocument(document).then((editor) => {
+          let line = Math.max(parseInt(link.data.line || 1) - 1, 0);
+          let column = Math.max(parseInt(link.data.column || 1) - 1, 0);
+          editor.revealRange(new vscode.Range(line, column, line, column));
+          editor.selection = new vscode.Selection(line, column, line, column);
+        });
+      });
     },
   });
 }
