@@ -12,11 +12,9 @@ correct position when you click on them.
 ```
 ERROR:Something has gone wrong. (file:/C:/SomeDir/src/main.mydsl line : 30 column : 4)
                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-``´
+```
 
 ## Release Notes
-
-Users appreciate release notes as you update your extension.
 
 ### 1.0.0
 

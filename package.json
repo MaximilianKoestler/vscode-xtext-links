@@ -3,7 +3,11 @@
 	"displayName": "Xtext Links",
 	"description": "Add terminal support for opening Xtext-style links",
 	"version": "1.0.0-alpha1",
+	"author": {
+		"name": "Maximilian Köstler"
+	},
 	"publisher": "MaximilianKoestler",
+	"license": "SEE LICENSE IN LICENSE",
 	"repository": {
 		"type" : "git",
 		"url" : "https://github.com/MaximilianKoestler/vscode-xtext-links.git"
@@ -14,6 +18,16 @@
 	"categories": [
 		"Other"
 	],
+	"keywords": [
+		"Xtext",
+		"terminal",
+		"console",
+		"warning",
+		"error",
+		"issue",
+		"link"
+	],
+	"icon": "icon.png",
 	"activationEvents": [
 		"onStartupFinished"
 	],
