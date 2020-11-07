@@ -31,14 +31,19 @@ export function activate(_context: vscode.ExtensionContext) {
         ? vscode.Uri.parse(link.data.path)
         : vscode.Uri.file(link.data.path);
 
-      vscode.workspace.openTextDocument(path).then((document) => {
-        vscode.window.showTextDocument(document).then((editor) => {
-          let line = Math.max(parseInt(link.data.line || 1) - 1, 0);
-          let column = Math.max(parseInt(link.data.column || 1) - 1, 0);
-          editor.revealRange(new vscode.Range(line, column, line, column));
-          editor.selection = new vscode.Selection(line, column, line, column);
-        });
-      });
+      vscode.workspace.openTextDocument(path).then(
+        (document) => {
+          vscode.window.showTextDocument(document).then((editor) => {
+            let line = Math.max(parseInt(link.data.line || 1) - 1, 0);
+            let column = Math.max(parseInt(link.data.column || 1) - 1, 0);
+            editor.revealRange(new vscode.Range(line, column, line, column));
+            editor.selection = new vscode.Selection(line, column, line, column);
+          });
+        },
+        (reason) => {
+          vscode.window.showErrorMessage(reason.message);
+        }
+      );
     },
   });
 }
