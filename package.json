@@ -2,7 +2,7 @@
 	"name": "xtext-links",
 	"displayName": "Xtext Links",
 	"description": "Add terminal support for opening Xtext-style links",
-	"version": "1.0.0-alpha1",
+	"version": "1.0.0",
 	"author": {
 		"name": "Maximilian Köstler"
 	},
