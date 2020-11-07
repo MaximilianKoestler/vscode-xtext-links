@@ -1,4 +1,4 @@
-# xtext-links README
+# Xtext Links Terminal Support
 
 With this extension you can open links from the terminal that are formatted the way that Xtext
 produces warnings/errors.
